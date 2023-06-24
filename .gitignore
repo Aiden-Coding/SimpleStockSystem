@@ -10,3 +10,5 @@ pnpm-debug
 **/__pycache__/*
 **/__pycache__*
 app/config/__pycache__/__init__.cpython-310.pyc
+.husky
+.vscode
