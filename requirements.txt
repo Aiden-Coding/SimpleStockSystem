@@ -1,0 +1,5 @@
+APScheduler==3.10.1
+pandas==2.0.2
+Requests==2.31.0
+sanic==23.3.0
+tortoise==0.1.1
