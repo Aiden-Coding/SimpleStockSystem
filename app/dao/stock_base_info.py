@@ -2,8 +2,8 @@ from tortoise import Model, fields
 
 
 class StockBaseInfo(Model):
-    id = fields.BigIntField(pk=True, source_field='id', generated=True)
-    name = fields.CharField(100, source_field='name')
+    id = fields.BigIntField(pk=True, source_field='id', generated=True,description='id')
+    name = fields.CharField(100, source_field='name',description='名称')
     code = fields.CharField(50, unique=True, source_field='code')
     latestPrice = fields.FloatField(source_field='latest_price', null=True)
 
@@ -13,7 +13,8 @@ class StockBaseInfo(Model):
     class Meta:
         abstract = False
         table = 'stock_base_info'
+        indexes = ["code"]  #索引
+        table_description = '股票信息'
 
     async def insert_stockBaseInfos(stockBaseInfos):
-        # goods = [StockBaseInfo(**data) for data in stockBaseInfos]
         await StockBaseInfo.bulk_create(stockBaseInfos)

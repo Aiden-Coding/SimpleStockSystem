@@ -16,7 +16,7 @@ app = Sanic("sanic-app", request_class=Request)
 register_tortoise(
     app, db_url="mysql://root:@Cl9rLemOtSn$5iq@127.0.0.1:3306/stock",
     modules={"models": ["app.dao.user", "app.dao.stock_base_info"]},
-    generate_schemas=False
+    generate_schemas=True
 )
 app.config.update_config(config)
 app.config.RESPONSE_TIMEOUT = 6000
