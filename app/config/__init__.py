@@ -50,8 +50,6 @@ async def server_error_handler(request, exception):
 
 
 # serve index.html, built by Vue-CLI
-
-
 @app.route('/')
 async def handle_request(request):
     return await response.file('dist-pro/index.html')
