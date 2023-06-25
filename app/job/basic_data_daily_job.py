@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import math
 import os.path
 import sys
 
@@ -12,6 +13,7 @@ import app.constant as tbs
 # import instock.lib.database as mdb
 import app.crawling.stockfetch as stf
 from app.crawling.singleton_stock import stock_data
+from app.dao.cn_etf_spot import CnEtfSpot
 
 
 # 股票实时行情数据。
@@ -47,8 +49,17 @@ def save_nph_etf_spot_data(date, before=True):
         data = stf.fetch_etfs(date)
         if data is None or len(data.index) == 0:
             return
-
-        table_name = tbs.TABLE_CN_ETF_SPOT['name']
+        # todo
+        sto = []
+        for index, row in data.iterrows():
+            st = CnEtfSpot(code=row['代码'], name=row['名称'])
+            if not math.isnan(row['最新价']):
+                st.latestPrice = row['最新价']
+            sto.append(st)
+        for st in sto:
+            stt = await CnEtfSpot.get_or_none(pk=st.id)
+            if stt is None:
+                await st.save()
         # 删除老数据。
         # if mdb.checkTableIsExist(table_name):
         #     del_sql = f"DELETE FROM `{table_name}` where `date` = '{date}'"
