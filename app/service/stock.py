@@ -168,4 +168,3 @@ async def insert_of_null_stock():
         stt = await StockBaseInfo.get_or_none(pk=st.id)
         if stt is None:
             await st.save()
-
