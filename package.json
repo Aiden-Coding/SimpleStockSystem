@@ -6,7 +6,7 @@
   "private": false,
   "scripts": {
     "i": "pnpm install",
-    "build_klinecharts-pro_add_pack": "cd klinecharts-pro && pnpm run build && pnpm pack && cd ../ && pnpm add ./klinecharts-pro/klinecharts-pro-0.1.2.tgz && vite --mode base",
+    "build_klinecharts-pro_add_pack": "cd klinecharts-pro && pnpm run build && pnpm pack && cd ../ && pnpm add ./klinecharts-pro/klinecharts-pro-0.1.2.tgz",
     "dev": "vite --mode base",
     "ts:check": "vue-tsc --noEmit",
     "build:pro": "vite build --mode klinecharts-pro",
