@@ -64,7 +64,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       viteMockServe({
         ignore: /^\_/,
         mockPath: 'mock',
-        localEnabled: false,
+        localEnabled: !isBuild,
         prodEnabled: !isBuild,
         injectCode: `
           import { setupProdMockServer } from '../mock/_createProductionServer'

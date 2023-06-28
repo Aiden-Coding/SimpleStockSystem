@@ -62,9 +62,29 @@ onMounted(() => {
     // 初始化周期
     period: { multiplier: 1, timespan: 'day', text: '日线' },
     // 这里使用默认的数据接入，如果实际使用中也使用默认数据，需要去 https://polygon.io/ 申请 API key
-    datafeed: new CustDefaultDatafeed()
+    datafeed: new CustDefaultDatafeed(),
+    onDrawEnd: (event) => {
+      console.log(event)
+    }
   })
-  console.log(chart)
+  console.log(chart.getChart())
+  chart.getChart().createOverlay({
+    id: '23',
+    name: 'rayLine',
+    extendData: 'Override overlay',
+    // points: [
+    //   { timestamp: 1678118400000, value: 13.527306451612905 },
+    //   { timestamp: 1681920000000, value: 12.2705 }
+    // ],
+    lock: true,
+    styles: { text: { color: 'rgba(100, 10, 200, .3)' } },
+    onDrawEnd: function ({ overlay }) {
+      // Listen to the completion of drawing and overwrite the attribute
+      console.log(overlay)
+    }
+  })
+  // console.log(chart.getChart().getOverlayById('23'))
+
   chartViewData.chart = chart
   chartViewData.ticker = chartViewData.chart.getSymbol().ticker
 })

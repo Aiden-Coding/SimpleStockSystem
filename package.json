@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@iconify/iconify": "^3.1.0",
-    "@klinecharts/pro": "^0.1.1",
+    "@klinecharts/pro": "file:klinecharts-pro-0.1.2.tgz",
     "@vueuse/core": "^9.13.0",
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-vue": "^5.1.10",
