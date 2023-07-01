@@ -78,6 +78,16 @@ export const asyncRouterMap: AppRouteRecordRaw[] = [
         }
       },
       {
+        path: 'stockdata2',
+        component: () => import('@/views/Stock/StockData2.vue'),
+        name: 'StockData2',
+        meta: {
+          title: '主页面',
+          noCache: true,
+          affix: true
+        }
+      },
+      {
         path: 'workplace',
         component: () => import('@/views/Dashboard/Workplace.vue'),
         name: 'Workplace',

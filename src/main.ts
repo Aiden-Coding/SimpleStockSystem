@@ -33,6 +33,9 @@ import { createApp } from 'vue'
 import App from './App.vue'
 
 import './permission'
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+
+
 
 // 创建实例
 const setupAll = async () => {
@@ -49,7 +52,9 @@ const setupAll = async () => {
   setupRouter(app)
 
   setupPermission(app)
-
+  for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+    app.component(key, component)
+  }
   app.mount('#app')
 }
 

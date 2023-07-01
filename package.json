@@ -28,6 +28,7 @@
     "analysis": "windicss-analysis"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.1.0",
     "@iconify/iconify": "^3.1.0",
     "@klinecharts/pro": "file:klinecharts-pro/klinecharts-pro-0.1.2.tgz",
     "@vueuse/core": "^9.13.0",
