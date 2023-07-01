@@ -68,21 +68,21 @@ onMounted(() => {
     }
   })
   console.log(chart.getChart())
-  chart.getChart().createOverlay({
-    id: '23',
-    name: 'rayLine',
-    extendData: 'Override overlay',
-    // points: [
-    //   { timestamp: 1678118400000, value: 13.527306451612905 },
-    //   { timestamp: 1681920000000, value: 12.2705 }
-    // ],
-    lock: true,
-    styles: { text: { color: 'rgba(100, 10, 200, .3)' } },
-    onDrawEnd: function ({ overlay }) {
-      // Listen to the completion of drawing and overwrite the attribute
-      console.log(overlay)
-    }
-  })
+  // chart.getChart().createOverlay({
+  //   id: '23',
+  //   name: 'rayLine',
+  //   extendData: 'Override overlay',
+  //   // points: [
+  //   //   { timestamp: 1678118400000, value: 13.527306451612905 },
+  //   //   { timestamp: 1681920000000, value: 12.2705 }
+  //   // ],
+  //   lock: true,
+  //   styles: { text: { color: 'rgba(100, 10, 200, .3)' } },
+  //   onDrawEnd: function ({ overlay }) {
+  //     // Listen to the completion of drawing and overwrite the attribute
+  //     console.log(overlay)
+  //   }
+  // })
   // console.log(chart.getChart().getOverlayById('23'))
 
   chartViewData.chart = chart
