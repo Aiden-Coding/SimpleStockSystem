@@ -8,9 +8,9 @@
 import { dispose, init } from 'klinecharts'
 import generatedDataList from './generatedDataList'
 // 引入js
-import { KLineChartPro, DefaultDatafeed } from '@klinecharts/pro'
+import { KLineChartPro, DefaultDatafeed } from 'npm_klinecharts_pro'
 // 引入样式
-import '@klinecharts/pro/dist/klinecharts-pro.css'
+import 'npm_klinecharts_pro/dist/klinecharts-pro.css'
 import initData from './initData'
 import ChartLayout from './ChartLayout.vue'
 

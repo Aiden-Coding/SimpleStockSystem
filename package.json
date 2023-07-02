@@ -6,7 +6,6 @@
   "private": false,
   "scripts": {
     "i": "pnpm install",
-    "build_klinecharts-pro_add_pack": "cd klinecharts-pro && pnpm run build && pnpm pack && cd ../ && pnpm add ./klinecharts-pro/klinecharts-pro-0.1.2.tgz",
     "dev": "vite --mode base",
     "ts:check": "vue-tsc --noEmit",
     "build:pro": "vite build --mode klinecharts-pro",
@@ -30,7 +29,7 @@
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",
     "@iconify/iconify": "^3.1.0",
-    "@klinecharts/pro": "file:klinecharts-pro/klinecharts-pro-0.1.2.tgz",
+    "npm_klinecharts_pro": "^0.1.1",
     "@vueuse/core": "^9.13.0",
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-vue": "^5.1.10",

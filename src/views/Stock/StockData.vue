@@ -10,11 +10,11 @@ import { dispose, init } from 'klinecharts'
 import { onUnmounted, onMounted, reactive, watch } from 'vue'
 import generatedDataList from './generatedDataList'
 // 引入js
-import { KLineChartPro } from '@klinecharts/pro'
+import { KLineChartPro } from 'npm_klinecharts_pro'
 // 引入js
 import CustDefaultDatafeed from './CustDefaultDatafeed'
 // 引入样式
-import '@klinecharts/pro/dist/klinecharts-pro.css'
+import 'npm_klinecharts_pro/dist/klinecharts-pro.css'
 import initData from './initData'
 import { useDesign } from '@/hooks/web/useDesign'
 const { getPrefixCls } = useDesign()
@@ -67,7 +67,7 @@ onMounted(() => {
       console.log(event)
     }
   })
-  console.log(chart.getChart())
+  console.log(chart.getChart().getOffsetRightDistance())
   // chart.getChart().createOverlay({
   //   id: '23',
   //   name: 'rayLine',
@@ -84,7 +84,8 @@ onMounted(() => {
   //   }
   // })
   // console.log(chart.getChart().getOverlayById('23'))
-
+  chart.getChart().setOffsetRightDistance(0)
+  chart.getChart().setLeftMinVisibleBarCount(1)
   chartViewData.chart = chart
   chartViewData.ticker = chartViewData.chart.getSymbol().ticker
 })

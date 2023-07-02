@@ -116,13 +116,13 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       proxy: {
         // 选项写法
         '/user': {
-          target: 'http://0.0.0.0:1337',
+          target: 'http://10.211.55.3:1337',
           changeOrigin: true,
           // rewrite: path => path.replace(/^\/api/, '')
         },
         // 选项写法
         '/stock': {
-          target: 'http://0.0.0.0:1337',
+          target: 'http://10.211.55.3:1337',
           changeOrigin: true,
           // rewrite: path => path.replace(/^\/api/, '')
         },

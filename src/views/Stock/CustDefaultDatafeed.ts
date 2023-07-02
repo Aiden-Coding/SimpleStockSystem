@@ -13,7 +13,7 @@
  */
 
 import { KLineData } from 'klinecharts'
-import { Datafeed, SymbolInfo, Period, DatafeedSubscribeCallback } from '@klinecharts/pro'
+import { Datafeed, SymbolInfo, Period, DatafeedSubscribeCallback } from 'npm_klinecharts_pro'
 
 export default class CustDefaultDatafeed implements Datafeed {
   private _apiKey?: string
@@ -51,19 +51,24 @@ export default class CustDefaultDatafeed implements Datafeed {
     from: number,
     to: number
   ): Promise<KLineData[]> {
-    const response = await fetch(
-      `/stock/ticker/${symbol.ticker}/range/${period.multiplier}/${period.timespan}/${from}/${to}`
-    )
-    const result = await response.json()
-    return await (result.data || []).map((data: any) => ({
-      timestamp: data.t,
-      open: data.o,
-      high: data.h,
-      low: data.l,
-      close: data.c,
-      volume: data.v,
-      turnover: data.vw
-    }))
+    try {
+      const response = await fetch(
+        `/stock/ticker/${symbol.ticker}/range/${period.multiplier}/${period.timespan}/${from}/${to}`
+      )
+      const result = await response.json()
+      return await (result.data || []).map((data: any) => ({
+        timestamp: data.t,
+        open: data.o,
+        high: data.h,
+        low: data.l,
+        close: data.c,
+        volume: data.v,
+        turnover: data.vw
+      }))
+    } catch (e) {
+      console.log(e)
+      return []
+    }
   }
 
   subscribe(symbol: SymbolInfo, period: Period, callback: DatafeedSubscribeCallback): void {}

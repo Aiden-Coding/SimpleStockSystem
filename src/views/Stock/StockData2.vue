@@ -1,7 +1,7 @@
 <template>
   <div class="homeward">
     <el-container class="main_container">
-      <el-aside width="20%" class="{['absolute top-0 left-0 h-full']}">
+      <el-aside width="20%" class="{['absolute top-0 left-0 h-full']}" visibility="false">
         <div style="width: 100%; height: 100%">
           <div style="width: 100%; height: 95%">
             <el-table :data="tableData" style="width: 100%" height="100%">
