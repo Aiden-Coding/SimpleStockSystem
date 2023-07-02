@@ -5,6 +5,7 @@ import akshare as ak
 import pandas as pd
 import requests
 
+from app.dao.cn_ths_stock_board_concept_name_ths import cn_ths_stock_block
 from app.dao.stock_base_info import StockBaseInfo
 
 
@@ -160,11 +161,24 @@ async def insert_of_null_stock():
     stock_zh_a_spot_em_df = ak.stock_zh_a_spot_em()
     sto = []
     for index, row in stock_zh_a_spot_em_df.iterrows():
-        st = StockBaseInfo(id=row['序号'], code=row['代码'], name=row['名称'])
+        st = StockBaseInfo(code=row['代码'], name=row['名称'])
         if not math.isnan(row['最新价']):
             st.latestPrice = row['最新价']
         sto.append(st)
     for st in sto:
-        stt = await StockBaseInfo.get_or_none(pk=st.id)
+        stt = await StockBaseInfo.get_or_none(code=st.code)
+        if stt is None:
+            await st.save()
+
+async def update_cn_ths_stock_block():
+    stock_board_concept_name_ths_df = ak.stock_board_concept_name_ths()
+    sto = []
+    for index, row in stock_board_concept_name_ths_df.iterrows():
+        st = cn_ths_stock_block(date=row['日期'], name=row['概念名称'], code=row['代码'], counts=row['成分股数量'], url=row['网址'])
+        if not math.isnan(row['成分股数量']):
+            st.counts = row['成分股数量']
+        sto.append(st)
+    for st in sto:
+        stt = await cn_ths_stock_block.get_or_none(code=st.code)
         if stt is None:
             await st.save()

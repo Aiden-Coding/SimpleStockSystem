@@ -24,7 +24,7 @@ register_tortoise(
                         "app.dao.cn_stock_strategy_high_tight_flag", "app.dao.cn_stock_strategy_keep_increasing",
                         "app.dao.cn_stock_strategy_low_atr", "app.dao.cn_stock_strategy_low_backtrace_increase",
                         "app.dao.cn_stock_strategy_parking_apron", "app.dao.cn_stock_strategy_turtle_trade",
-                        "app.dao.cn_stock_top", "app.dao.stock_base_info", "app.dao.stock_base_info"]},
+                        "app.dao.cn_stock_top", "app.dao.stock_base_info", "app.dao.stock_base_info", "app.dao.cn_ths_stock_block"]},
     generate_schemas=False
 )
 app.config.update_config(config)
