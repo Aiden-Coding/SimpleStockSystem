@@ -1,5 +1,5 @@
 from app.config import app
-from app.job.stock_base_info_job import update_stock_base_infoT
+from app.job.job_main import update_stock_base_infoT
 
 
 @app.after_server_start
@@ -9,7 +9,7 @@ async def after_server_star(*_):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=1337)
+    app.run(host='0.0.0.0', port=1338)
     # 添加定时任务
 
 # To Run:

@@ -13,7 +13,7 @@ async def bp_root(request):
     return response.text(MyEncoder().encode(ret))
 
 @akshareBp.route('/update_cn_ths_stock_block')
-async def bp_root(request):
+async def update_cn_ths_stock(request):
     await update_cn_ths_stock_block()
     ret = Result("ok", SUCCESS)
     return response.text(MyEncoder().encode(ret))

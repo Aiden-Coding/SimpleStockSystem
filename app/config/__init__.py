@@ -25,7 +25,7 @@ register_tortoise(
                         "app.dao.cn_stock_strategy_low_atr", "app.dao.cn_stock_strategy_low_backtrace_increase",
                         "app.dao.cn_stock_strategy_parking_apron", "app.dao.cn_stock_strategy_turtle_trade",
                         "app.dao.cn_stock_top", "app.dao.stock_base_info", "app.dao.stock_base_info", "app.dao.cn_ths_stock_block"]},
-    generate_schemas=False
+    generate_schemas=True
 )
 app.config.update_config(config)
 app.config.RESPONSE_TIMEOUT = 6000

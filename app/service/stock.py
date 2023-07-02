@@ -5,7 +5,7 @@ import akshare as ak
 import pandas as pd
 import requests
 
-from app.dao.cn_ths_stock_board_concept_name_ths import cn_ths_stock_block
+from app.dao.cn_ths_stock_block import cn_ths_stock_block
 from app.dao.stock_base_info import StockBaseInfo
 
 
@@ -170,12 +170,14 @@ async def insert_of_null_stock():
         if stt is None:
             await st.save()
 
+
 async def update_cn_ths_stock_block():
     stock_board_concept_name_ths_df = ak.stock_board_concept_name_ths()
     sto = []
     for index, row in stock_board_concept_name_ths_df.iterrows():
-        st = cn_ths_stock_block(date=row['日期'], name=row['概念名称'], code=row['代码'], counts=row['成分股数量'], url=row['网址'])
-        if not math.isnan(row['成分股数量']):
+        st = cn_ths_stock_block(date=row['日期'], name=row['概念名称'], code=row['代码'], counts=row['成分股数量'],
+                                url=row['网址'])
+        if row['成分股数量'] is not None and not math.isnan(row['成分股数量']):
             st.counts = row['成分股数量']
         sto.append(st)
     for st in sto:
