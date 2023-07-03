@@ -14,7 +14,7 @@ class Request(_Request):
 
 app = Sanic("sanic-app", request_class=Request)
 register_tortoise(
-    app, db_url="mysql://root:@Cl9rLemOtSn$5iq@0.0.0.0:3306/stock",
+    app, db_url="mysql://root:@Cl9rLemOtSn$5iq@150.158.2.196:3306/stock",
     modules={"models": ["app.dao.user", "app.dao.cn_etf_spot", "app.dao.cn_stock_backtest_data",
                         "app.dao.cn_stock_blocktrade", "app.dao.cn_stock_fund_flow", "app.dao.cn_stock_indicators_buy",
                         "app.dao.cn_stock_indicators_sell", "app.dao.cn_stock_indicators", "app.dao.cn_stock_pattern",

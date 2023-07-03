@@ -3,12 +3,13 @@ from datetime import datetime
 from sanic import Blueprint, response
 from tortoise.expressions import Q
 
+import app.utils.akshare_ext as akext
 from app.constant import Result, MyEncoder
 from app.constant import SUCCESS
 from app.dao.cn_ths_stock_block import cn_ths_stock_block
 from app.dao.stock_base_info import StockBaseInfo
 from app.service import stock
-import akshare as ak
+
 stockApi = Blueprint('stockApi', url_prefix='/stock')
 
 
@@ -54,10 +55,12 @@ async def logout(request, ticker, multiplier, timespan, from_time, to):
     resultData = []
     if stt is not None:
         # 同花顺板块数据
-        from_time = datetime.fromtimestamp(int(from_time) / 1000).year
-        data = ak.stock_board_concept_hist_ths(start_year=from_time, symbol=stt.name)
+        to = datetime.fromtimestamp(int(to) / 1000).year
+        data = akext.stock_board_concept_hist_ths(year=to, symbol=stt.name, symbol_code=stt.code,
+                                                  timespan=timespan)
         for index, row in data.iterrows():
-            data = TickData(row['日期'], row['开盘价'], row['最高价'], row['最低价'], row['收盘价'], row['成交量'], row['成交额'])
+            data = TickData(row['日期'], row['开盘价'], row['最高价'], row['最低价'], row['收盘价'], row['成交量'],
+                            row['成交额'])
             time_struct = datetime.strptime(row['日期'], "%Y-%m-%d")
             data.t = int(time_struct.timestamp()) * 1000
             resultData.append(data)
@@ -78,7 +81,8 @@ async def logout(request, ticker, multiplier, timespan, from_time, to):
         data = stock.stock_zh_a_hist(ticker, timespan, from_time, to)
 
         for index, row in data.iterrows():
-            data = TickData(row['日期'], row['开盘'], row['最高'], row['最低'], row['收盘'], row['成交量'], row['成交额'])
+            data = TickData(row['日期'], row['开盘'], row['最高'], row['最低'], row['收盘'], row['成交量'],
+                            row['成交额'])
             time_struct = datetime.strptime(row['日期'], "%Y-%m-%d")
             data.t = int(time_struct.timestamp()) * 1000
             resultData.append(data)
