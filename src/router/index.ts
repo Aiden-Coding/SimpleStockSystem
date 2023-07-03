@@ -73,8 +73,8 @@ export const asyncRouterMap: AppRouteRecordRaw[] = [
         name: 'StockData',
         meta: {
           title: t('router.stockdata'),
-          noCache: true,
-          affix: true
+          noCache: true
+          // affix: true //会固定不可关闭
         }
       },
       {
@@ -83,8 +83,7 @@ export const asyncRouterMap: AppRouteRecordRaw[] = [
         name: 'StockData2',
         meta: {
           title: '主页面',
-          noCache: true,
-          affix: true
+          noCache: true
         }
       },
       {
@@ -92,7 +91,7 @@ export const asyncRouterMap: AppRouteRecordRaw[] = [
         component: () => import('@/views/Dashboard/Workplace.vue'),
         name: 'Workplace',
         meta: {
-          hidden: true,
+          // hidden: true,
           title: t('router.workplace'),
           noCache: true
         }
