@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import { dispose, init } from 'klinecharts'
+import { dispose, init, CandleType } from 'klinecharts'
 import { onUnmounted, onMounted, reactive, watch } from 'vue'
 import generatedDataList from './generatedDataList'
 // 引入js
@@ -17,6 +17,7 @@ import CustDefaultDatafeed from './CustDefaultDatafeed'
 import 'npm_klinecharts_pro/dist/klinecharts-pro.css'
 import initData from './initData'
 import { useDesign } from '@/hooks/web/useDesign'
+import { getIdApi, addApi, getPicTagApi } from '@/api/stockPicTag'
 const { getPrefixCls } = useDesign()
 const prefixCls = getPrefixCls('update')
 let chartViewData = reactive({
@@ -28,6 +29,7 @@ onMounted(() => {
   // 创建实例
   let chart = new KLineChartPro({
     container: document.getElementById('container'),
+    watermark: '',
     styles: {
       candle: {
         // 蜡烛柱
@@ -55,19 +57,52 @@ onMounted(() => {
       type: 'ADRC'
     },
     periods: [
-      { multiplier: 1, timespan: 'day', text: '日线' },
-      { multiplier: 1, timespan: 'week', text: '周线' },
-      { multiplier: 1, timespan: 'month', text: '月线' }
+      // { multiplier: 1, timespan: 'second', text: '分时', candleType: CandleType.Area },
+      { multiplier: 1, timespan: 'day', text: '日K', candleType: CandleType.CandleSolid },
+      { multiplier: 1, timespan: 'week', text: '周K', candleType: CandleType.CandleSolid },
+      { multiplier: 1, timespan: 'month', text: '月K', candleType: CandleType.CandleSolid }
     ],
     // 初始化周期
-    period: { multiplier: 1, timespan: 'day', text: '日线' },
-    // 这里使用默认的数据接入，如果实际使用中也使用默认数据，需要去 https://polygon.io/ 申请 API key
+    period: {
+      multiplier: 1,
+      timespan: 'day',
+      text: '日K',
+      candleType: CandleType.CandleSolid
+    },
+    drawingBarVisible: false,
     datafeed: new CustDefaultDatafeed(),
     onDrawEnd: (event) => {
+      console.log('End')
       console.log(event)
+      let data = {
+        id: event.overlay.id,
+        name: event.overlay.extendData.symbol.name,
+        code: event.overlay.extendData.symbol.ticker,
+        timespan: event.overlay.extendData.period.timespan,
+        tagClass: event.overlay.name,
+        tagText: JSON.stringify(event.overlay.points)
+      }
+      //save
+      addApi(data)
+        .then((response) => {
+          console.log(response.data)
+        })
+        .catch((error) => {
+          console.log('An error occurred:', error)
+        })
+    },
+    onDrawStart: async (event) => {
+      console.log('res')
+      const res = await getIdApi()
+      console.log(res)
+      event.overlay.id = res.data
+    },
+    onSymbolOrPeriodChange: () => {
+      // chart.getChart().removeOverlay({ groupId: 'drawing_tools' })
     }
   })
-  console.log(chart.getChart().getOffsetRightDistance())
+  chart.setTheme('dark')
+
   // chart.getChart().createOverlay({
   //   id: '23',
   //   name: 'rayLine',
@@ -84,10 +119,52 @@ onMounted(() => {
   //   }
   // })
   // console.log(chart.getChart().getOverlayById('23'))
-  chart.getChart().setOffsetRightDistance(0)
-  chart.getChart().setLeftMinVisibleBarCount(1)
+  // chart.getChart().setOffsetRightDistance(0)
+  // chart.getChart().setLeftMinVisibleBarCount(155)
+
+  // chart.getChart().setRightMinVisibleBarCount(20)
   chartViewData.chart = chart
   chartViewData.ticker = chartViewData.chart.getSymbol().ticker
+  getPicTagApi('000001', 'day').then((result) => {
+    // Promise 成功时的处理逻辑
+    console.log(result)
+
+    let a = []
+    for (let i = 0; i < result.data.length; i++) {
+      // chart.getChart().createOverlay({
+      //   id: '23',
+      //   name: 'rayLine',
+      //   extendData: 'Override overlay',
+      //   points: [
+      //     { timestamp: 1678118400000, value: 13.527306451612905 },
+      //     { timestamp: 1681920000000, value: 12.2705 }
+      //   ],
+      //   lock: true,
+      //   styles: { text: { color: 'rgba(100, 10, 200, .3)' } },
+      //   onDrawEnd: function ({ overlay }) {
+      //     // Listen to the completion of drawing and overwrite the attribute
+      //     console.log(overlay)
+      //   }
+      // })
+      a.push(result.data[i].id)
+      console.log(result.data[i].tagText)
+      chart.createOverlay({
+        id: result.data[i].id,
+        name: result.data[i].tagClass,
+        // points: [
+        //   { timestamp: 1678118400000, value: 13.527306451612905 },
+        //   { timestamp: 1681920000000, value: 12.2705 }
+        // ],
+        lock: true,
+        styles: { text: { color: 'rgba(100, 10, 200, .3)' } },
+        points: JSON.parse(result.data[i].tagText)
+      })
+      console.log('hello')
+      console.log('{' + result.data[i].tagText + '}')
+    }
+    console.log(a)
+    chart.setOverlayIds(a)
+  })
 })
 const hel = () => {
   chartViewData.ticker = '000815'

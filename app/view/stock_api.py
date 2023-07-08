@@ -1,5 +1,6 @@
 from datetime import datetime
 
+import pandas as pd
 from sanic import Blueprint, response
 from tortoise.expressions import Q
 
@@ -52,12 +53,28 @@ async def search_base_info(request):
 @stockApi.route("/ticker/<ticker>/range/<multiplier>/<timespan>/<from_time>/<to>")
 async def logout(request, ticker, multiplier, timespan, from_time, to):
     stt = await cn_ths_stock_block.get_or_none(code=ticker)
+    oldTO = int(to)
     resultData = []
     if stt is not None:
         # 同花顺板块数据
+        from_time = datetime.fromtimestamp(int(from_time) / 1000).year
         to = datetime.fromtimestamp(int(to) / 1000).year
-        data = akext.stock_board_concept_hist_ths(year=to, symbol=stt.name, symbol_code=stt.code,
-                                                  timespan=timespan)
+        if from_time != to and timespan == 'day':
+            data = pd.DataFrame()
+            for i in range(from_time, to+1):
+                data1 = akext.stock_board_concept_hist_ths(year=i, symbol=stt.name, symbol_code=stt.code,
+                                                       timespan=timespan)
+                data = pd.concat([data, data1])
+
+        else:
+            data = akext.stock_board_concept_hist_ths(year=to, symbol=stt.name, symbol_code=stt.code,
+                                                      timespan=timespan)
+        first_row = data.iloc[0]
+        time_struct = datetime.strptime(first_row['日期'], "%Y-%m-%d")
+        ttime = int(time_struct.timestamp()) * 1000
+        if ttime > oldTO:
+            ret = Result(resultData, SUCCESS)
+            return response.text(MyEncoder().encode(ret))
         for index, row in data.iterrows():
             data = TickData(row['日期'], row['开盘价'], row['最高价'], row['最低价'], row['收盘价'], row['成交量'],
                             row['成交额'])
@@ -79,7 +96,12 @@ async def logout(request, ticker, multiplier, timespan, from_time, to):
             from_time = datetime.fromtimestamp(int(from_time) / 1000).strftime('%Y%m%d')
             to = datetime.fromtimestamp(int(to) / 1000).strftime('%Y%m%d')
         data = stock.stock_zh_a_hist(ticker, timespan, from_time, to)
-
+        first_row = data.iloc[0]
+        time_struct = datetime.strptime(first_row['日期'], "%Y-%m-%d")
+        ttime = int(time_struct.timestamp()) * 1000
+        if ttime > oldTO:
+            ret = Result(resultData, SUCCESS)
+            return response.text(MyEncoder().encode(ret))
         for index, row in data.iterrows():
             data = TickData(row['日期'], row['开盘'], row['最高'], row['最低'], row['收盘'], row['成交量'],
                             row['成交额'])

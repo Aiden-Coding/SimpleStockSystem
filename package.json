@@ -29,7 +29,7 @@
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",
     "@iconify/iconify": "^3.1.0",
-    "npm_klinecharts_pro": "^0.1.1",
+    "npm_klinecharts_pro": "file:/Users/dong/workspace/npm_klinecharts_pro/npm_klinecharts_pro-0.1.0.tgz",
     "@vueuse/core": "^9.13.0",
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-vue": "^5.1.10",

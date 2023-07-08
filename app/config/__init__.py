@@ -5,7 +5,7 @@ from sanic.request import Request as _Request
 from tortoise.contrib.sanic import register_tortoise
 
 from app.config.config import Config
-from app.view import akshareBp, userApi, stockApi
+from app.view import akshareApi, userApi, stockApi, stockPicTagApi
 
 
 class Request(_Request):
@@ -14,7 +14,7 @@ class Request(_Request):
 
 app = Sanic("sanic-app", request_class=Request)
 register_tortoise(
-    app, db_url="mysql://root:@Cl9rLemOtSn$5iq@127.0.0.1:3306/stock",
+    app, db_url="mysql://root:@Cl9rLemOtSn$5iq@150.158.2.196:3306/stock",
     modules={"models": ["app.dao.user", "app.dao.cn_etf_spot", "app.dao.cn_stock_backtest_data",
                         "app.dao.cn_stock_blocktrade", "app.dao.cn_stock_fund_flow", "app.dao.cn_stock_indicators_buy",
                         "app.dao.cn_stock_indicators_sell", "app.dao.cn_stock_indicators", "app.dao.cn_stock_pattern",
@@ -24,7 +24,8 @@ register_tortoise(
                         "app.dao.cn_stock_strategy_high_tight_flag", "app.dao.cn_stock_strategy_keep_increasing",
                         "app.dao.cn_stock_strategy_low_atr", "app.dao.cn_stock_strategy_low_backtrace_increase",
                         "app.dao.cn_stock_strategy_parking_apron", "app.dao.cn_stock_strategy_turtle_trade",
-                        "app.dao.cn_stock_top", "app.dao.stock_base_info", "app.dao.stock_base_info", "app.dao.cn_ths_stock_block"]},
+                        "app.dao.cn_stock_top", "app.dao.stock_base_info", "app.dao.stock_base_info",
+                        'app.dao.cn_stock_pic_tag',"app.dao.cn_ths_stock_block"]},
     generate_schemas=True
 )
 app.config.update_config(config)
@@ -34,9 +35,10 @@ app.static('/static', 'dist-pro/static', name="static")
 app.static('/assets', 'dist-pro/assets', name="assets")
 app.static('/favicon.ico', 'dist-pro/favicon.ico', name="favicon")
 app.static('/logo.png', 'dist-pro/logo.png', name="logo")
-app.blueprint(akshareBp)
+app.blueprint(akshareApi)
 app.blueprint(userApi)
 app.blueprint(stockApi)
+app.blueprint(stockPicTagApi)
 
 
 @app.exception(NotFound)
