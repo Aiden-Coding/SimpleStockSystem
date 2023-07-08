@@ -17,7 +17,7 @@ import CustDefaultDatafeed from './CustDefaultDatafeed'
 import 'npm_klinecharts_pro/dist/klinecharts-pro.css'
 import initData from './initData'
 import { useDesign } from '@/hooks/web/useDesign'
-import { getIdApi, addApi, getPicTagApi } from '@/api/stockPicTag'
+import { getIdApi, addApi, getPicTagApi, deleteByIdPicTagApi } from '@/api/stockPicTag'
 const { getPrefixCls } = useDesign()
 const prefixCls = getPrefixCls('update')
 let chartViewData = reactive({
@@ -79,9 +79,13 @@ onMounted(() => {
         name: event.overlay.extendData.symbol.name,
         code: event.overlay.extendData.symbol.ticker,
         timespan: event.overlay.extendData.period.timespan,
-        tagClass: event.overlay.name,
-        tagText: JSON.stringify(event.overlay.points)
+        tagClass: event.overlay.name
       }
+      const pointsT = []
+      for (const item of event.overlay.points) {
+        pointsT.push({ timestamp: item.timestamp, value: item.value })
+      }
+      data.tagText = JSON.stringify(pointsT)
       //save
       addApi(data)
         .then((response) => {
@@ -98,7 +102,10 @@ onMounted(() => {
       event.overlay.id = res.data
     },
     onSymbolOrPeriodChange: () => {
-      // chart.getChart().removeOverlay({ groupId: 'drawing_tools' })
+      initPicTag(chartViewData.chart.getSymbol().ticker, chartViewData.chart.getPeriod().timespan)
+    },
+    onRemoveOverlayById: (value) => {
+      deleteByIdPicTagApi(value)
     }
   })
   chart.setTheme('dark')
@@ -123,49 +130,26 @@ onMounted(() => {
   // chart.getChart().setLeftMinVisibleBarCount(155)
 
   // chart.getChart().setRightMinVisibleBarCount(20)
+  initPicTag(chart.getSymbol().ticker, chart.getPeriod().timespan)
   chartViewData.chart = chart
   chartViewData.ticker = chartViewData.chart.getSymbol().ticker
-  getPicTagApi('000001', 'day').then((result) => {
-    // Promise 成功时的处理逻辑
-    console.log(result)
-
+})
+const initPicTag = (ticker, timespan) => {
+  getPicTagApi(ticker, timespan).then((result) => {
     let a = []
     for (let i = 0; i < result.data.length; i++) {
-      // chart.getChart().createOverlay({
-      //   id: '23',
-      //   name: 'rayLine',
-      //   extendData: 'Override overlay',
-      //   points: [
-      //     { timestamp: 1678118400000, value: 13.527306451612905 },
-      //     { timestamp: 1681920000000, value: 12.2705 }
-      //   ],
-      //   lock: true,
-      //   styles: { text: { color: 'rgba(100, 10, 200, .3)' } },
-      //   onDrawEnd: function ({ overlay }) {
-      //     // Listen to the completion of drawing and overwrite the attribute
-      //     console.log(overlay)
-      //   }
-      // })
       a.push(result.data[i].id)
       console.log(result.data[i].tagText)
-      chart.createOverlay({
+      chartViewData.chart.createOverlay({
         id: result.data[i].id,
         name: result.data[i].tagClass,
-        // points: [
-        //   { timestamp: 1678118400000, value: 13.527306451612905 },
-        //   { timestamp: 1681920000000, value: 12.2705 }
-        // ],
         lock: true,
-        styles: { text: { color: 'rgba(100, 10, 200, .3)' } },
         points: JSON.parse(result.data[i].tagText)
       })
-      console.log('hello')
-      console.log('{' + result.data[i].tagText + '}')
     }
-    console.log(a)
-    chart.setOverlayIds(a)
+    chartViewData.chart.setOverlayIds(a)
   })
-})
+}
 const hel = () => {
   chartViewData.ticker = '000815'
   chartViewData.chart.setSymbol({

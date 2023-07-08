@@ -13,3 +13,10 @@ class User(Model):
     class Meta:
         abstract = False
         table = 'user'
+
+    def to_dict(self):
+        return {
+            "id": self.id,  # 注意：此处 "uid" 要与 MyJWTConfig 中的 user_id 设置一致！
+            "sex": self.sex,
+            "username": self.name,
+        }

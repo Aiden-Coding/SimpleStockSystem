@@ -11,3 +11,7 @@ export const addApi = (data: any): Promise<IResponse> => {
 export const getPicTagApi = (code: string, timespan: string): Promise<IResponse> => {
   return request.get({ url: '/stockPicTag/getPicTag', params: { code, timespan } })
 }
+
+export const deleteByIdPicTagApi = (id: string): Promise<IResponse> => {
+  return request.delete({ url: `/stockPicTag/deleteById/${id}` })
+}

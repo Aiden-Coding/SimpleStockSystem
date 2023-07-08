@@ -31,6 +31,13 @@ async def getId(request):
     return response.text(MyEncoder().encode(ret))
 
 
+@stockPicTagApi.route("/deleteById/<id>", methods=['DELETE'])
+async def deleteById(request, id):
+    count = await cn_stock_pic_tag.filter(pk=id).delete()
+    ret = Result(count, SUCCESS)
+    return response.text(MyEncoder().encode(ret))
+
+
 @stockPicTagApi.route("/getPicTag")
 async def getPicTag(request):
     code = request.args.get("code")
@@ -38,7 +45,8 @@ async def getPicTag(request):
     result_data = []
     stocks2 = await cn_stock_pic_tag.filter(Q(Q(code=code), Q(timespan=timespan), join_type="AND"))
     for stock in stocks2:
-        stock_tmp = cn_stock_pic_tag(id=stock.id, name= stock.name, code=stock.code, timespan=stock.timespan, tagClass=stock.tagClass, tagText=stock.tagText)
+        stock_tmp = cn_stock_pic_tag(id=stock.id, name=stock.name, code=stock.code, timespan=stock.timespan,
+                                     tagClass=stock.tagClass, tagText=stock.tagText)
         result_data.append(stock_tmp)
     ret = Result(result_data, SUCCESS)
     return response.text(MyEncoder().encode(ret))

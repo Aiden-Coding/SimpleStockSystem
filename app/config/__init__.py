@@ -2,9 +2,11 @@ from sanic import Sanic, response
 from sanic.exceptions import NotFound
 from sanic.log import logger
 from sanic.request import Request as _Request
+from sanic_jwt import initialize
 from tortoise.contrib.sanic import register_tortoise
 
 from app.config.config import Config
+from app.service.jwt import authenticate, MyJWTAuthentication, MyJWTConfig, MyJWTResponse
 from app.view import akshareApi, userApi, stockApi, stockPicTagApi
 
 
@@ -40,7 +42,8 @@ app.blueprint(userApi)
 app.blueprint(stockApi)
 app.blueprint(stockPicTagApi)
 
-
+initialize(app, authenticate=authenticate,
+           authentication_class=MyJWTAuthentication, configuration_class=MyJWTConfig, responses_class=MyJWTResponse)
 @app.exception(NotFound)
 async def ignore_404s(request, exception):
     return response.text("404. Oops, That page couldn't found.")

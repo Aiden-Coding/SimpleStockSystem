@@ -14,7 +14,7 @@ def stock_zh_a_hist(
         period: str = "daily",
         start_date: str = "19700101",
         end_date: str = "20500101",
-        adjust: str = "",
+        adjust: str = "qfq",
 ) -> pd.DataFrame:
     """
     东方财富网-行情首页-沪深京 A 股-每日行情
@@ -184,3 +184,26 @@ async def update_cn_ths_stock_block():
         stt = await cn_ths_stock_block.get_or_none(code=st.code)
         if stt is None:
             await st.save()
+
+
+def is_point_on_right_or_left(a, b, c):
+    # 计算向量AB和向量AC的叉积
+    cross_product = (b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1])
+
+    if cross_product > 0:
+        return "右侧"
+    elif cross_product < 0:
+        return "左侧"
+    else:
+        return "线上"
+
+
+# 示例数据
+a = (1678809600000, 22.647093434343436)
+b = (1688054400000, 18.27955303030303)
+c = (1688659200000, 17.81)
+if __name__ == '__main__':
+    # 调用函数进行判断
+    result = is_point_on_right_or_left(a, b, c)
+    print(f"点C在线AB的{result}")
+
