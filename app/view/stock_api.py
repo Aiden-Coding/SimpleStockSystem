@@ -3,13 +3,17 @@ from datetime import datetime
 import pandas as pd
 from sanic import Blueprint, response
 from tortoise.expressions import Q
+from tortoise.transactions import in_transaction
 
 import app.utils.akshare_ext as akext
 from app.constant import Result, MyEncoder
 from app.constant import SUCCESS
 from app.dao.cn_ths_stock_block import cn_ths_stock_block
+from app.dao.group.group import group
 from app.dao.stock_base_info import StockBaseInfo
 from app.service import stock
+from app.view.group.groupStockdto import GroupStockDto
+from app.view.group.groupdto import GroupDto
 
 stockApi = Blueprint('stockApi', url_prefix='/stock')
 
@@ -61,9 +65,9 @@ async def logout(request, ticker, multiplier, timespan, from_time, to):
         to = datetime.fromtimestamp(int(to) / 1000).year
         if from_time != to and timespan == 'day':
             data = pd.DataFrame()
-            for i in range(from_time, to+1):
+            for i in range(from_time, to + 1):
                 data1 = akext.stock_board_concept_hist_ths(year=i, symbol=stt.name, symbol_code=stt.code,
-                                                       timespan=timespan)
+                                                           timespan=timespan)
                 data = pd.concat([data, data1])
 
         else:
@@ -109,4 +113,45 @@ async def logout(request, ticker, multiplier, timespan, from_time, to):
             data.t = int(time_struct.timestamp()) * 1000
             resultData.append(data)
     ret = Result(resultData, SUCCESS)
+    return response.text(MyEncoder().encode(ret))
+
+
+@stockApi.route("/myGroup/add", methods=['POST'])
+async def myGroupadd(request):
+    groupName = request.json.get("name")
+    groupDb = group(name=groupName)
+    await groupDb.save()
+    ret = Result('ok', SUCCESS)
+    return response.text(MyEncoder().encode(ret))
+
+
+@stockApi.route("/myGroup/grouplist")
+async def myGroupgrouplist(request):
+    list = await group.all()
+    groups = []
+    for groupT in list:
+        groups.append(GroupDto(id=groupT.id, name=groupT.name))
+    ret = Result(groups, SUCCESS)
+    return response.text(MyEncoder().encode(ret))
+
+
+async def execute_raw_sql(sql, params):
+    # 在事务中执行原生 SQL 查询
+    async with in_transaction() as conn:
+        result = await conn.execute_query(sql, params)
+    # 获取查询返回的所有行
+    result = result[1]
+    return result
+
+
+@stockApi.route("/myGroup/stocks", methods=['POST'])
+async def myGroupstocks(request):
+    sql = 'SELECT `group`.id,group_stock.stock_code FROM `group` inner join group_stock on `group`.id = group_stock.group_id where `group`.name= %s'
+    params = (request.json.get('groupName'),)
+    result = await execute_raw_sql(sql, params)
+
+    groups = []
+    for groupT in result:
+        groups.append(GroupStockDto(group_id=groupT['id'], code=groupT['stock_code']))
+    ret = Result(groups, SUCCESS)
     return response.text(MyEncoder().encode(ret))

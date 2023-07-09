@@ -6,3 +6,7 @@ Content-Type: application/json
 
 ### delet
 DELETE http://localhost:1338/stockPicTag/deleteById/1
+
+
+### delet
+GET  http://localhost:1338/stock/myGroup/grouplist
