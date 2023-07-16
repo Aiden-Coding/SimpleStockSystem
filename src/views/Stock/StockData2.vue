@@ -30,7 +30,7 @@
               +
             </el-button>
 
-            <el-table :data="reativeObject.stockist" style="width: 100%" height="96%">
+            <el-table :data="reativeObject.stockist" style="width: 100%" height="96%" width="100%">
               <el-table-column label="Date" width="75" fixed sortable>
                 <template #header>
                   <span>代码</span>
