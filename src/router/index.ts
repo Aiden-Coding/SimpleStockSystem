@@ -10,7 +10,7 @@ export const constantRouterMap: AppRouteRecordRaw[] = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard/stockdata',
+    redirect: '/dashboard/StockData2',
     name: 'Root',
     meta: {
       hidden: true
@@ -59,7 +59,7 @@ export const asyncRouterMap: AppRouteRecordRaw[] = [
   {
     path: '/dashboard',
     component: Layout,
-    redirect: '/dashboard/stockdata',
+    redirect: '/dashboard/StockData2',
     name: 'Dashboard',
     meta: {
       title: t('router.dashboard'),
@@ -67,16 +67,6 @@ export const asyncRouterMap: AppRouteRecordRaw[] = [
       alwaysShow: true
     },
     children: [
-      {
-        path: 'stockdata',
-        component: () => import('@/views/Stock/StockData.vue'),
-        name: 'StockData',
-        meta: {
-          title: t('router.stockdata'),
-          noCache: true
-          // affix: true //会固定不可关闭
-        }
-      },
       {
         path: 'stockdata2',
         component: () => import('@/views/Stock/StockData2.vue'),

@@ -14,7 +14,7 @@ def cron_job():
 async def update_stock_base_infoT():
     # generate a URL for the endpoint `post_handler`
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(cron_job, CronTrigger.from_crontab('*/1 * * * *'))
+    # scheduler.add_job(cron_job, CronTrigger.from_crontab('*/1 * * * *'))
     scheduler.add_job(update_stock_base_infohel, CronTrigger.from_crontab('26 9 * * *'))
     scheduler.add_job(update_cn_ths_stock_block_db, CronTrigger.from_crontab('26 9 * * *'))
     scheduler.start()
