@@ -108,7 +108,7 @@ onMounted(() => {
       deleteByIdPicTagApi(value)
     }
   })
-  chart.setTheme('dark')
+  // chart.setTheme('dark')
 
   // chart.getChart().createOverlay({
   //   id: '23',

@@ -88,7 +88,8 @@ import {
   ElTableColumn,
   ElPagination,
   ElCheckTag,
-  ElInput
+  ElInput,
+  ElButton
 } from 'element-plus'
 import StockData from './StockData.vue'
 import { onMounted, reactive, ref, nextTick } from 'vue'
